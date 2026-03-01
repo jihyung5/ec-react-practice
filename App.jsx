@@ -26,12 +26,25 @@ function App() {
   // 表示件数
   const [visibleCount, setVisibleCount] = useState(8);
 
+  const categoryLabel = {
+    all: "すべて",
+    tops: "トップス",
+    pants: "パンツ",
+    bag: "バッグ",
+    accessary: "アクセサリー"
+  };
+  // ローディング演出
+  const [loading, setLoading] = useState(true);
+
   return (
     <div className="container">
-      <h1>商品一覧</h1>
+      <h1>模擬EC</h1>
 
       {/* フィルター */}
       <div className="controls">
+
+      {/* 左側 */}
+      <div className="controls-left">
         <select onChange={(e) => setCategory(e.target.value)}>
           <option value="all">すべて</option>
           <option value="tops">トップス</option>
@@ -47,6 +60,16 @@ function App() {
         </select>
       </div>
 
+      {/* 右側 */}
+      <div className="controls-right">
+        <p>カテゴリ: {categoryLabel[category]}</p>
+        <p>{sortedProducts.length}件</p>
+      </div>
+
+    </div>
+
+      
+
       {/* 商品一覧 */}
       <div className="grid">
       {sortedProducts.slice(0, visibleCount).map((item) => (
@@ -54,14 +77,13 @@ function App() {
           <ProductCard product={item} />
         </div>
       ))}
-
-      
+      </div>
       
       {/* モーダル表示 */}
       {selectedProduct && (
         <div className="modal" onClick={() => setSelectedProduct(null)}>
           <div className="modalContent" onClick={(e) => e.stopPropagation()}>
-            <img src={selectedProduct.image} />
+            <img src={selectedProduct.image} alt={selectedProduct.name} />
             <h2>{selectedProduct.name}</h2>
             <p>¥{selectedProduct.price.toLocaleString()}</p>
 
@@ -69,7 +91,6 @@ function App() {
           </div>
         </div>
       )}
-      </div>
 
       {visibleCount < sortedProducts.length && (
         <div className="more-btn">
@@ -81,7 +102,8 @@ function App() {
           </button>
         </div>
       )}
-    </div>
+      
+    </div>  
   );
 }
 
